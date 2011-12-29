@@ -16,6 +16,10 @@ Class.subclass('Settings', {
   
   delete: function(key) {
     localStorage.removeItem(key);
+  },
+  
+  deleteAll: function() {
+    localStorage.clear();
   }
   
 }, {

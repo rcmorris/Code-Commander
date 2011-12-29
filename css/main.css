@@ -48,6 +48,14 @@ body {
   height: 600px;
 }
 
+#title {
+  height: 16px;
+  line-height: 16px;
+  margin-bottom: 4px;
+  color: #666;
+  font-weight: bold; 
+}
+
 #canvas {
   width: 512px;
   height: 512px;
@@ -82,6 +90,7 @@ button {
   background: #ddd;
   cursor: pointer;
   padding: 4px;
+  margin-right: 8px;
 
   background-image: linear-gradient(top, rgb(230,230,230) 28%, rgb(186,186,186) 68%);
   background-image: -o-linear-gradient(top, rgb(230,230,230) 28%, rgb(186,186,186) 68%);
@@ -113,10 +122,73 @@ button.toggle.off img {
   margin-bottom: 10px;
 }
 
+.indent {
+  margin-left: 15px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
 .boxed {
   background: #ddd;
   padding: 18px; 
   box-shadow: 1px 3px 8px #000;
   border: 2px solid #aaa;
   border-radius: 8px;
+}
+
+#overlay {
+  display: none;
+  position: absolute;
+  left: 33px;
+  top: 53px;
+  opacity: 0.5;
+  background: #000;
+  width: 492px;
+  height: 492px;
+}
+#overlay-contents {
+  display: none;
+  position: absolute;
+  left: 33px;
+  top: 53px;
+  padding: 25px;
+  width: 442px;
+  height: 442px;
+  color: #fff !important;
+}
+#overlay-contents h1 {
+  font-size: 25px;
+  color: #fff; 
+}
+#overlay-contents td {
+  color: #fff; 
+}
+
+table {
+  border-collapse: collapse;
+}
+td {
+  padding: 4px;
+}
+
+.level {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  font-weight: bold;
+  float: left;
+  margin-right: 10px;
+  border: 1px solid #fff;
+  text-align: center;
+}
+.level:hover {
+  background: #444; 
+}
+.level.completed {
+  background: #553;
+  color: #ffa;
+  border-color: #aa6; 
 }

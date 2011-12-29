@@ -2,7 +2,21 @@
 Class.subclass('App', {
   
   SPRITES: {
-    tank: [0,0]
+    tank: [0,0],
+    tree: [1,0],
+    base: [2,0],
+    mine: [7,0],
+    rock1: [0,1],
+    rock2: [1,1],
+    'wall-horizontal': [2,1],
+    'wall-vertical': [3,1],
+    'wall-corner': [4,1],
+    bullet: [7,1],
+    'tower-off': [0,2],
+    'tower-on1': [1,2],
+    'tower-on2': [2,2],
+    'tower-on3': [3,2],
+    'tower-beam': [4,2]
   },
   
   start: function() {
@@ -14,7 +28,7 @@ Class.subclass('App', {
     
     // Load our resources
     Crafty.load([
-      '/images/tank.png'
+      '/images/sprites.png'
     ], function() {
       app.setup();
     });
@@ -31,14 +45,22 @@ Class.subclass('App', {
     Crafty.canvas.init();
     
     // Set up our libraries and resources
+    this.setupOverlay();
     this.setupSettings();
     this.setupAudio();
     this.setupSprites();
     this.setupControls();
 
-    this.tank = Crafty.e('2D, Canvas, Tween, tank').attr({x: 4*64, y: 7*64, w: 64, h: 64, rotation: 90}).origin(32, 32);
-    this.tank.tween({x: 4*64, y: 5*64}, 70);
-    //this.tank.tween({rotation: 86}, 20);
+    // Start us up
+    if (!this.settings.get('name')) {
+      this.overlay.displayPage('enter-name');
+    } else {
+      this.overlay.displayPage('welcome');
+    }
+  },
+
+  setupOverlay: function() {
+    this.overlay = new Overlay();
   },
 
   setupSettings: function() {
@@ -50,11 +72,14 @@ Class.subclass('App', {
   },
   
   setupSprites: function() {
-    Crafty.sprite(64, '/images/tank.png', App.SPRITES);
+    Crafty.sprite(64, '/images/sprites.png', App.SPRITES);
+    Crafty.sprite(90, '/images/explosion-sprites.png', {explosion: [0,0]});
   },
 
   setupControls: function() {
     var self = this;
+    
+    $('#program').val('');
     
     $('#audio-toggle').click(function() {
       self.audio.muteAll(!self.audio.muted);
@@ -67,16 +92,39 @@ Class.subclass('App', {
     $('#run-button').click(function() {
       self.runProgram();
     });
+    $('#select-button').click(function() {
+      self.selectLevel();
+    });
+    $('#reset-button').click(function() {
+      self.settings.deleteAll();
+      self.overlay.displayPage('enter-name');
+    });
+  },
+  
+  selectLevel: function() {
+    this.overlay.displayPage('select-level');
   },
 
-  runProgram: function() {
-    this.audio.play('program', {pan: 90});
-    var program = new Program();
-    program.run();
+  loadLevel: function(difficulty, num) {
+    this.overlay.hide();
+    if (this.level) {
+      this.level.unload();
+    }
+    this.level = Level.load(difficulty, num);
+    this.map = this.level.map;
+    this.program = this.level.program;
   },
   
-  tileCenter: function(x, y) {
-    return {x: x*64+32, y: y*64+32};
-  }
+  resetLevel: function() {
+    if (this.level) {
+      this.loadLevel(this.level.difficulty, this.level.num); 
+    }
+  },
   
+  runProgram: function() {
+    if (!this.level) { return; }
+    //this.audio.play('program', {pan: 90});
+    this.program.run();
+  }
+    
 });

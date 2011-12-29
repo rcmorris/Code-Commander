@@ -1,0 +1,18 @@
+
+UI:
+
+Make "Run Program" turn to "Reset" after done
+Help for each level
+Programming help with commands
+Object help describing objects with pics
+
+Objects:
+
+Gate + Switch
+Alternating cycle laser gates
+Ammo box
+Shield box
+
+Future:
+
+Turn into helicopter, cross rivers/walls

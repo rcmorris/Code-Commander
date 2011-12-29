@@ -44,7 +44,7 @@ Class.subclass('Sound', {
   },
   
   onLoaded: function() {
-    this.play('music');
+    //this.play('music');
   },
   
   play: function(snd, options) {

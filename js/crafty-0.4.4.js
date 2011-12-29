@@ -4435,12 +4435,12 @@ Crafty.c("Tween", {
 	*    .tween({alpha: 0.0, x: 100, y: 100}, 200)
 	* ~~~
 	*/
-	tween: function(props, duration) {
-        this.each(function() {
+  tween: function(props, duration) {
+    this.each(function() {
 			if (this._step == null) {
 				this._step = {};
 				this.bind('EnterFrame', tweenEnterFrame);
-				this.bind('RemoveComponent', function (c) {
+				this.bind('RemoveComponent', function(c) {
 					if (c == 'Tween') {
 						this.unbind('EnterFrame', tweenEnterFrame);
 					}
@@ -4448,11 +4448,20 @@ Crafty.c("Tween", {
 			}
 			
 			for (var prop in props) {
-				this._step[prop] = {val: (props[prop] - this[prop] )/duration, rem: duration};
-				this._numProps++;
+			  // Only increment if we're not replacing existing tween
+			  if (!this._step[prop]) { this._numProps++; }
+			  // Store start, end and duration so we can do the math later
+			  var delta = (props[prop] - this[prop]);
+			  if (prop == 'rotation' && Math.abs(delta) > 180) { delta = (delta < 0) ? delta + 360 : delta - 360; }
+				this._step[prop] = {
+				  start: this[prop],
+				  delta: delta,
+				  duration: duration, 
+				  count: 0
+				};
 			}
-        });
-        return this;
+    });
+    return this;
 	}
 });
 
@@ -4462,10 +4471,13 @@ function tweenEnterFrame(e) {
 	var prop, k;
 	for (k in this._step) {
 		prop = this._step[k];
-		this[k] += prop.val;
-		if (prop.rem-- == 0) {
+		prop.count++;
+		
+	  this[k] = prop.start + (prop.delta * prop.count / prop.duration);
+		
+		if (prop.count == prop.duration) {
 			this.trigger("TweenEnd", k);
-			delete prop;
+			delete this._step[k];
 			this._numProps--;
 		}
 	}
