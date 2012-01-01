@@ -21,16 +21,35 @@ MapObject.subclass('BeamTower', {
     var dirs = [Dir.UP, Dir.RIGHT, Dir.DOWN, Dir.LEFT];
     for (var i = 0; i < 4; i ++) {
       var dir = dirs[i];
-      var pos = this.getMapPos();
-      map.addDir(pos,dir,1);
+      var beamType = dir.isVertical() ? BeamVertical : BeamHorizontal;
+      var beamTypeName = beamType.className;
+
+      // Start at our pos, and look in this direction until we find a beam, another tower, or
+      // the edge of the map
+      var pos = this.getMapPos().addDir(dir,1);
       var done = false;
-      while (!done && map.onMap(pos)) {
-        var hasTower = map.getObject(pos.x, pos.y, 'BeamTower');
-        var hasBeam = map.getObject(pos.x, pos.y, 'BeamTower');
+      while (!done) {
+        var hasBeam = map.getObject(pos, beamTypeName);
+        var hasTower = map.getObject(pos, 'BeamTower');
         if (hasTower) {
+          // Found a matching tower, no beams between us - add 'em!
+          var endPos = pos;
+          pos = this.getMapPos().addDir(dir,1);
+          while (!pos.isEqual(endPos)) {
+            var beam = new beamType(map);
+            beam.setMapPos(pos);
+            pos.addDir(dir, 1);
+          }          
           done = true
+          
+        } else if (hasBeam || !map.isPassable(pos)) {
+          // Found an existing beam or impassible spot
+          done = true
+
+        } else {
+          // Keep marching
+          pos.addDir(dir,1);
         }
-        map.addDir(pos,dir,1);
       }
     }
   },

@@ -16,6 +16,10 @@ Class.subclass('Dir', {
     return Dir.fromID(dir.toID() - 1);    
   },
   
+  opposite: function() {
+    return Dir.fromDir(dir.toID() + 2);
+  },
+  
   fromID: function(id) {
     id = id % 4;
     while (id < 0) {
@@ -42,6 +46,22 @@ Class.subclass('Dir', {
   
   toDegrees: function() {
     return this.degrees;
+  },
+  
+  orientation: function() {
+    if (this.id == 0 || this.id == 2) {
+      return 'v';
+    } else {
+      return 'h';
+    }
+  },
+  
+  isVertical: function() {
+    return this.orientation() == 'v'; 
+  },
+  
+  isHorizontal: function() {
+    return !this.isVertical();
   }
   
 });

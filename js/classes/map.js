@@ -33,12 +33,19 @@ Class.subclass('Map', {
   },
   
   each: function(x, y, callback) {
+    var pos;
     var objs = null;
     if (x instanceof Function) {
       objs = this.getObjects();
       callback = x;
     } else {
-      objs = this.getObjects(x,y);
+      if (MapPos.isPos(x)) {
+        pos = x.dup();
+        callback = y; 
+      } else {
+        pos = MapPos.parse(x,y);
+      }
+      objs = this.getObjects(pos);
     }
     for (var i = 0; i < objs.length; i++) {
       var obj = objs[i];
@@ -47,7 +54,14 @@ Class.subclass('Map', {
   },
 
   getObject: function(x, y, klass) {
-    var objs = this.getObjects(x,y);
+    var pos;
+    if (MapPos.isPos(x)) {
+      pos = x.dup();
+      klass = y; 
+    } else {
+      pos = MapPos.parse(x,y);
+    }
+    var objs = this.getObjects(pos);
     for (var i = 0; i < objs.length; i++) {
       if (objs[i].classRef.className == klass) {
         return objs[i];
@@ -60,10 +74,11 @@ Class.subclass('Map', {
     if (x === undefined) {
       return this.objects;
     } else {
-      if (this.onMap(x,y)) {
-        return this.mapArray[y][x];
+      var pos = MapPos.parse(x,y);
+      if (this.onMap(pos)) {
+        return this.mapArray[pos.y][pos.x];
       } else {
-        return null;
+        return [];
       }
     }
   },
@@ -81,7 +96,7 @@ Class.subclass('Map', {
     this.objects = this.arrayRemove(this.objects, obj);
     var oldPos = obj.getMapPos();
     if (this.onMap(oldPos)) {
-      var objs = this.getObjects(oldPos.x,oldPos.y);
+      var objs = this.getObjects(oldPos);
       this.mapArray[oldPos.y][oldPos.x] = this.arrayRemove(objs, obj);
     }
   },
@@ -148,29 +163,10 @@ Class.subclass('Map', {
     }
   },
   
-  addDir: function(pos, dir, count) {
-    var newPos = {x: pos.x, y: pos.y};
-    switch(dir) {
-      case Dir.UP:
-        newPos.y -= count;
-        break;
-      case Dir.RIGHT:
-        newPos.x += count;
-        break;
-      case Dir.DOWN:
-        newPos.y += count;
-        break;
-      case Dir.LEFT:
-        newPos.x -= count;
-        break;
-    }
-    return newPos;
-  },
-  
   isPassable: function(x, y) {
     if (!this.onMap(x,y)) { return false; }
     
-    var pos = (y === undefined) ? x : {x: x, y: y};
+    var pos = MapPos.parse(x,y);
     var passable = true;
     this.each(pos.x, pos.y, function(obj) {
       if (!obj.isPassable()) {
@@ -181,7 +177,7 @@ Class.subclass('Map', {
   },
   
   onMap: function(x, y) {
-    var pos = (y === undefined) ? x : {x: x, y: y};
+    var pos = MapPos.parse(x,y);
     
     if (!pos || pos.x === null) { return false; }
     if (pos.x < 0 || pos.y < 0 || pos.x >= 8 || pos.y >= 8) { return false; }

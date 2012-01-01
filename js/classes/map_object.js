@@ -8,9 +8,8 @@ Class.subclass('MapObject', {
     
     // Default State
     if (this.dir === undefined) { this.dir = Dir.UP; }
-    this.x = null;
-    this.y = null;
-    this.hitpoints = 1;
+    if (this.mapPos === undefined) { this.mapPos = null; }
+    if (this.hitpoints === undefined) { this.hitpoints = 1; }
     if (this.passable === undefined) { this.passable = false; }
     if (this.damageable === undefined) { this.damageable = true; }
     
@@ -112,34 +111,27 @@ Class.subclass('MapObject', {
   },
   
   getMapPos: function() {
-    return {x: this.x, y: this.y};
+    return this.mapPos ? this.mapPos.dup() : null;
   },
 
   setMapPos: function(x, y) {
-    if (y === undefined) {
-      y = x.y;
-      x = x.x;
-    }
-
     // Move on map (will remove from old location)
     this.map.addObject(this, x, y);
 
     // Set new map pos, display pos
-    this.x = x;
-    this.y = y;
-    this.setPos(x*64, y*64);
+    this.mapPos = MapPos.parse(x,y);
+    this.setScreenPos(this.mapPos.toScreenPos());
   },
   
-  getPos: function() {
-    return {x: this.entity.x, y: this.entity.y};
+  getScreenPos: function() {
+    return new ScreenPos(this.entity.x, this.entity.y);
   },
   
-  setPos: function(x, y) {
-    if (y === undefined) {
-      y = x.y;
-      x = x.x;
+  setScreenPos: function(x, y) {
+    var pos = ScreenPos.parse(x,y);
+    if (pos) {
+      this.entity.attr({x: pos.x, y: pos.y});
     }
-    this.entity.attr({x: x, y: y});
   },
   
   setRotation: function(degrees) {

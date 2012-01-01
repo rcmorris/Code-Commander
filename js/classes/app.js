@@ -16,7 +16,8 @@ Class.subclass('App', {
     'tower-on1': [1,2],
     'tower-on2': [2,2],
     'tower-on3': [3,2],
-    'tower-beam': [4,2]
+    'tower-beam-h': [4,2],
+    'tower-beam-v': [5,2]
   },
   
   start: function() {

@@ -25,10 +25,10 @@ MapObject.subclass('Explosion', {
   
   setMapPos: function(x, y) {
     this._super(x,y);
-    var pos = this.getPos();
+    var pos = this.getScreenPos();
     pos.x -= 13;
     pos.y -= 13;
-    this.setPos(pos);
+    this.setScreenPos(pos);
     this.setRotation(x*5+y*40);
   }
   

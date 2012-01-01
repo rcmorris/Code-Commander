@@ -111,13 +111,14 @@ Class.subclass('Program', {
       // First cycle, begin iteration
       this.currentCommand = 0;
     } else {
+      // Iteration
       this.currentCommand += 1;      
+      // Let everything update as needed
+      this.map.each(function(obj) {
+        obj.onCycle();
+      });
     }
     
-    // Let everything update as needed
-    this.map.each(function(obj) {
-      obj.onCycle();
-    });
     if (!this.running) { return; }
 
     // Check for just running out of commands
@@ -148,7 +149,7 @@ Class.subclass('Program', {
       
       case 'move':
         // Move forward
-        var newPos = map.addDir(tank.getMapPos(), tank.getDir(), 1);
+        var newPos = tank.getMapPos().addDir(tank.getDir(), 1);
         if (map.isPassable(newPos)) {
           // Do the move!
           app.audio.play('move-tank');
@@ -159,10 +160,10 @@ Class.subclass('Program', {
           });
         } else {
           // Bump!
-          var curPos = tank.getPos();
-          var newPos = map.addDir(curPos, tank.getDir(), 5);
-          tank.tween({x: newPos.x, y: newPos.y}, 2, function() {
-            tank.tween({x: curPos.x, y: curPos.y}, 2, function() {
+          var curPos = tank.getScreenPos();
+          var newPos = curPos.dup().addDir(tank.getDir(), 8);
+          tank.tween({x: newPos.x, y: newPos.y}, 3, function() {
+            tank.tween({x: curPos.x, y: curPos.y}, 3, function() {
               setTimeout(function() {program.unlock();}, 800);
             });
           });
@@ -201,16 +202,16 @@ Class.subclass('Program', {
         app.audio.play('fire');
         setTimeout(function() {
           var bullet = new Bullet(map);
-          var startPos = tank.getPos();
-          startPos = map.addDir(startPos, tank.getDir(), 32);
-          bullet.setPos(startPos);
+          var startPos = tank.getScreenPos();
+          startPos.addDir(tank.getDir(), 32);
+          bullet.setScreenPos(startPos);
           bullet.setDir(tank.getDir());
-          var endMapPos = map.addDir(tank.getMapPos(), tank.getDir(), 1);
+          var endMapPos = tank.getMapPos().addDir(tank.getDir(), 1);
           while (map.isPassable(endMapPos)) {
-            endMapPos = map.addDir(endMapPos, tank.getDir(), 1);
+            endMapPos.addDir(tank.getDir(), 1);
           }
-          var endPos = {x: endMapPos.x*64, y: endMapPos.y*64};
-          endPos = map.addDir(endPos, tank.getDir(), -22);
+          var endPos = endMapPos.toScreenPos();
+          endPos.addDir(tank.getDir(), -22);
           if (map.onMap(endMapPos)) {
             // Hit!
             var target = null;
