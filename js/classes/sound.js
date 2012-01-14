@@ -26,6 +26,7 @@ Class.subclass('Sound', {
         url: '/music/' + Sound.MUSIC + '.mp3',
         loops: 9999,
         autoplay: false,
+        autoload: true,
         volume: 10
       });
 
@@ -33,6 +34,7 @@ Class.subclass('Sound', {
       $.each(Sound.SOUNDS, function(i, sound) {
         soundManager.createSound({
           id: sound,
+          autoload: true,
           url: '/sounds/' + sound + '.mp3'
         });
       });
