@@ -112,7 +112,7 @@ Overlay.PAGES = {
   'win': function(p) {
     p.h1('You Win!!!')
       .p('Congratulations!  See if you can beat the next level!')
-      .button('Next Level');
+      .button('Next Level', "app.overlay.displayPage('select-level');");
   },
   
   'lose': function(p) {
@@ -120,5 +120,11 @@ Overlay.PAGES = {
       .p('You did not destroy the base - keep working on your program and try again!')
       .button('Retry', 'app.resetLevel()')
       .button('Select Level', "app.overlay.displayPage('select-level');");
+  },
+  
+  'help': function(p) {
+    p.h1('Help')
+      .p('Here be help')
+      .button('close', "app.overlay.hide();");
   }
 }

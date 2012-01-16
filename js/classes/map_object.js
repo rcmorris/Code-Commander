@@ -5,6 +5,7 @@ Class.subclass('MapObject', {
     this.map = map;
     
     this.entity = null;
+    this.animations = {};
     
     // Default State
     if (this.dir === undefined) { this.dir = Dir.UP; }
@@ -37,22 +38,36 @@ Class.subclass('MapObject', {
   },
   
   animate: function(defs) {
-    this.entity.requires('SpriteAnimation');
     for (var id in defs) {
       var def = defs[id];
-      var anim = this.entity.animate(id, def.spriteColRange[0], def.spriteRow, def.spriteColRange[1]);
-      anim.loop = def.loop;
-      anim.duration = def.duration;
+      var entity = def.entity || this.entity;
+      entity.requires('SpriteAnimation');
+
+      // Set up reel in entity for playback
+      entity.animate(id, def.spriteColRange[0], def.spriteRow, def.spriteColRange[1]);
+
+      var playFn = function() {
+				if (!entity.isPlaying()) {
+					entity.animate(id, def.duration, (def.loop === true) ? -1 : def.loop);
+					entity.unbind('EnterFrame', playFn);
+				}
+			};
+
+      // Define our animation and store it
+      this.animations[id] = {
+        entity: entity,
+        playFn: playFn
+      };
+            
       if (def.autoplay) {
-        var autoStartFn = function() {
-  				if (!this.isPlaying()) {
-  					this.animate(id, anim.duration, (anim.loop === true) ? -1 : anim.loop);
-  					this.unbind('EnterFrame', autoStartFn);
-					}
-  			};
-  			anim.bind("EnterFrame", autoStartFn);
+        this.playAnimation(id);
   		} 
     }    
+  },
+
+  playAnimation: function(id) {
+    var anim = this.animations[id];
+		anim.entity.bind("EnterFrame", anim.playFn);
   },
   
   onCycle: function() {
@@ -77,6 +92,8 @@ Class.subclass('MapObject', {
       if (this.hitpoints <= 0) {
         this.explode();
       }
+    } else {
+      app.audio.play('ricochet'); 
     }
   },
   
@@ -136,6 +153,10 @@ Class.subclass('MapObject', {
   
   setRotation: function(degrees) {
     this.entity.attr({rotation: degrees}); 
+  },
+  
+  getRotation: function() {
+    return this.entity.rotation;
   },
   
   tween: function(attrs, duration, callback) {

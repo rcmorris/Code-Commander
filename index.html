@@ -5,7 +5,8 @@
   <link href="/css/main.css" media="all" rel="stylesheet" type="text/css">
   <script src="/js/jquery-1.7.1.js"></script>
   <script src="/js/plugins/json-2.3.min.js"></script>
-  <script src="/js/crafty-0.4.4.js"></script>
+  <!-- <script src="/js/crafty-0.4.4.js"></script> -->
+  <script src="/js/crafty-dev.js"></script>
   <script src="/js/soundmanager2.js"></script>
   <script src="/js/class.js"></script>
   <script src="/js/classes/settings.js"></script>
@@ -33,6 +34,7 @@
     soundManager.url = '/swf/';
     soundManager.flashVersion = 9;
     soundManager.debugMode = false;
+    soundManager.useHighPerformance = true;
     // All classes now loaded...
     Class.classesLoaded();
   </script>

@@ -17,7 +17,24 @@ MapObject.subclass('Tank', {
   instantiate: function() {
     this.entity = this.basicEntity('tank');
     this.entity.requires('Tween');
+
+    this.turretEntity = this.basicEntity('turret');
+    this.turretEntity.requires('Tween');
+
+    this.entity.attach(this.turretEntity);
+
     this.setRotation(this.dir.toDegrees());
+    
+    this.animate({
+      fire: {
+        entity: this.turretEntity,
+        spriteRow: 3,
+        spriteColRange: [1,7],
+        duration: 14,
+        loop: false,
+        autoplay: false
+      }
+    });
   },
 
   explode: function() {

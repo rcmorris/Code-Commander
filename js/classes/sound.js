@@ -6,7 +6,7 @@ Class.subclass('Sound', {
   MUSIC: 'red-alert',
   
   // Sound files we should load
-  SOUNDS: ['explosion', 'fire', 'move-tank', 'program']  
+  SOUNDS: ['explosion', 'fire', 'move-tank', 'program', 'ricochet']
   
 }, {
   
@@ -46,7 +46,7 @@ Class.subclass('Sound', {
   },
   
   onLoaded: function() {
-    //this.play('music');
+    this.play('music');
   },
   
   play: function(snd, options) {

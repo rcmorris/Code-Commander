@@ -243,6 +243,21 @@ App.LEVELS = {
         'T.|...|.',
         '..|.^.|.'
       ]
+    },
+
+    {
+      key: 'multi-tower',
+      name: 'Tower Tangle',
+      map: [
+        '..OO.TRT',
+        '>......R',
+        'RROO..O.',
+        '.TTO..O.',
+        '.T......',
+        '.....T..',
+        'T...T.B.',
+        '..R.....'
+      ]
     }
     
   ]

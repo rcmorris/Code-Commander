@@ -2,7 +2,8 @@
 Class.subclass('App', {
   
   SPRITES: {
-    tank: [0,0],
+    tank: [0,3],
+    turret: [7,3],
     tree: [1,0],
     base: [2,0],
     mine: [7,0],

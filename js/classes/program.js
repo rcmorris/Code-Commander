@@ -174,7 +174,7 @@ Class.subclass('Program', {
         // Turn right
         app.audio.play('move-tank');
         var newDir = Dir.right(tank.getDir());
-        tank.tween({rotation: newDir.toDegrees()}, 35, function() {
+        tank.tween({rotation: tank.getRotation() + 90}, 35, function() {
           app.audio.stop('move-tank');
           tank.setDir(newDir);
           program.unlock();
@@ -185,7 +185,7 @@ Class.subclass('Program', {
         // Turn left
         app.audio.play('move-tank');
         var newDir = Dir.left(tank.getDir());
-        tank.tween({rotation: newDir.toDegrees()}, 35, function() {
+        tank.tween({rotation: tank.getRotation() - 90}, 35, function() {
           app.audio.stop('move-tank');
           tank.setDir(newDir);
           program.unlock();
@@ -200,6 +200,7 @@ Class.subclass('Program', {
       case 'fire':
         // Fire the cannon
         app.audio.play('fire');
+        tank.playAnimation('fire');
         setTimeout(function() {
           var bullet = new Bullet(map);
           var startPos = tank.getScreenPos();
@@ -226,9 +227,9 @@ Class.subclass('Program', {
             if (target) {
               target.takeDamage(1);
             }
-            program.unlock();
+            setTimeout(function() { program.unlock(); }, 500);
           });
-        }, 300);
+        }, 50);
         break;
         
     }
