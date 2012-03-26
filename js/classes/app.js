@@ -101,6 +101,9 @@ Class.subclass('App', {
       self.settings.deleteAll();
       self.overlay.displayPage('enter-name');
     });
+    $('#help-button').click(function() {
+      self.overlay.displayPage('help-programming');
+    });
   },
   
   selectLevel: function() {

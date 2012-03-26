@@ -11,6 +11,7 @@
 
 body {
   background: #4C5561 url(/images/bg.gif);
+  font-family: sans-serif;
 }
 
 #wrapper {
@@ -65,7 +66,7 @@ body {
 
 #program {
   border: 2px solid #888;
-  width: 100%;
+  width: 277px;
   height: 400px;
   padding: 5px;
   color: #cdf;
@@ -84,7 +85,7 @@ h1, h2, h3, h4, h5 {
 }
 
 button {
-  font-size: 20px;
+  font-size: 16px;
   border: 2px solid #444;
   box-shadow: 0 0 3px #000;
   background: #ddd;
@@ -157,6 +158,8 @@ button.toggle.off img {
   width: 442px;
   height: 442px;
   color: #fff !important;
+  font-family: sans-serif;
+  line-height: 20px;
 }
 #overlay-contents h1 {
   font-size: 25px;
