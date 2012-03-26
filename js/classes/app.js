@@ -91,18 +91,24 @@ Class.subclass('App', {
       $(this).removeClass('on').removeClass('off').addClass(muted ? 'off' : 'on');
     }).trigger('update-ui');
     
+    $('#help-button').click(function() {
+      self.overlay.displayPage('help-programming');
+    });
     $('#run-button').click(function() {
       self.runProgram();
     });
     $('#select-button').click(function() {
       self.selectLevel();
     });
+
     $('#reset-button').click(function() {
-      self.settings.deleteAll();
-      self.overlay.displayPage('enter-name');
+      if (confirm('Reset all progress?')) {
+        self.settings.deleteAll();
+        self.overlay.displayPage('enter-name');
+      }
     });
-    $('#help-button').click(function() {
-      self.overlay.displayPage('help-programming');
+    $('#about-button').click(function() {
+      self.overlay.displayPage('about');
     });
   },
   

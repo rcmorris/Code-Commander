@@ -1,21 +1,20 @@
-
 UI:
 
 Make "Run Program" turn to "Reset" after done
 Show errors on program run
 Show progress on program run
 Help for each level
-Programming help with commands
 Object help describing objects with pics
 Rotation working in Crafty core
 
 Objects:
 
 Gate + Switch
-Ammo box
+Ammo box (plus limited ammo)
 Shield box
 Explosive boxes? (use to clear out multiple items, or break through walls, or whatnot)
 
 Future:
 
-Turn into helicopter, cross rivers/walls
+Limited tries per level, with UI support for same
+Transform into helicopter, cross rivers/walls

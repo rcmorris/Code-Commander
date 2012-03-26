@@ -5,7 +5,7 @@ Class.subclass('Overlay', {
     this.contentNode = $('#overlay-contents'); 
   },
   
-  display: function(html) {
+  display: function(html, stack) {
     this.contentNode.html(html);
     this.show();
   },
@@ -16,8 +16,8 @@ Class.subclass('Overlay', {
   },
   
   hide: function() {
-    this.bgNode.hide();
     this.contentNode.hide();
+    this.bgNode.hide();
   },
   
   displayPage: function(name) {
@@ -141,6 +141,17 @@ Overlay.PAGES = {
       .indent('<b>wait</b>: wait a turn')
       .indent('<b>fire</b>: fire your gun - the bullet will travel until it hits something')
       .p('Commands can be repeated multiple times by adding a count like so: <b>move(3)</b>')
-      .button('close', "app.overlay.hide();");
+      .button('Close', "app.overlay.hide();");
+  },
+  
+  'about': function(p) {
+    p.h1('About Code Commander')
+      .p('This program is the personal project of Rob Morris of <a href="http://irongaze.com" target="_blank">Irongaze Consulting</a>.')
+      .p('It is written in pure Javascript, using <a href="http://jquery.com" target="_blank">jQuery</a>, <a href="http://craftyjs.com" target="_blank">CraftyJS</a> ' +
+         'and <a href="http://schillmania.com/projects/soundmanager2/" target="_blank">SoundManager 2</a>.')
+      .p('Source code for the project is hosted on <a href="https://github.com/irongaze/Code-Commander" target="_blank">GitHub</a>, and is licensed under the MIT license.')
+      .p('Sprites, fonts, icons, sounds and music (where not originally created) have been sourced from numerous generous contributors, and are all free for commercial use in one form or another.')
+      .p('Questions, comments or suggestions may be directed to <a href="mailto:codecommander@irongaze.com">codecommander@irongaze.com</a>.')
+      .button('Close', "app.overlay.hide();");
   }
 }
